@@ -7,18 +7,15 @@ const jwt=require("jsonwebtoken")
 
 router.post("/postQues",async(req,res)=>{
     const {body}=req.body
-    // console.log(req.cookies.token)
+    console.log("req",req.cookies.token)
     try{
-        const token =req.cookies.token
-        
-        const verified = await jwt.verify(token, "secret_key");
-        
-        const user= await User.findById(verified.user)
-       
+        const user= await User.findByToken(req.cookies.token)
+        console.log("2")
         const author=user.name
-       
+        const author_id=user._id
+        console.log(author,author_id)
         // res.send(user.name)
-        const ques= new Ques({author,body})
+        const ques= new Ques({author,author_id,body})
         const newQues=await ques.save()
         res.json(newQues)
         // console.log(newQues)
@@ -26,7 +23,7 @@ router.post("/postQues",async(req,res)=>{
 
     }
 catch(e){
-    res.status(404).send(e)
+    res.status(404).send("Something went wrong")
 }
 })
 
@@ -46,7 +43,6 @@ catch(e){
 })
 router.get("/:id", async (req, res) => {
     const _id = req.params.id;
-   console.log("Hi:",_id)
     // const tagArray = [];
     // var tagArrayName = [];
   
@@ -54,7 +50,10 @@ router.get("/:id", async (req, res) => {
     try {
         
         const ques = await Ques.findById(_id)
-        
+        const user=await User.findByToken(req.cookies.token)
+        if(user._id!=ques.author_id){
+           await Ques.findOneAndUpdate({_id}, {$inc : {'views' : 1}})
+        }
         if (!ques) {
             return res.send("No user found")
         }

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { BrowserRouter, Route,Switch } from 'react-router-dom';
+import { Redirect,BrowserRouter, Route,Switch } from 'react-router-dom';
 import Ques from "./Components/Homepage/homepagelist";
 import Login from "./Components/Login/login";
 import Navbar from "./Components/Navbar/navbar";
@@ -21,8 +21,10 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Switch>
+      <Route exact path="/" render={() => (
+        <Redirect to="/home"/>)}/>
       <Route path='/ques/:id' component={QuestionPage}/>
-      <Route exact path='/home' component={Ques} />
+      <Route  path='/home' component={Ques} />
       {
         loggedIn===false && (
           <>
