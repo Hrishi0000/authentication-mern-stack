@@ -6,6 +6,7 @@ import Navbar from "./Components/Navbar/navbar";
 import Register from "./Components/Register/register";
 import PostQues from "./Components/PostQuestion/postQues"
 import LogOutBtn from "./Components/Logout/logout";
+import QuestionPage from "./Components/QuesPage/quesPage";
 import axios from "axios";
 //import { AuthContextProvider } from "./context/AuthContext"
 import AuthContext from "./context/AuthContext";
@@ -20,6 +21,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Switch>
+      <Route path='/ques/:id' component={QuestionPage}/>
       <Route exact path='/home' component={Ques} />
       {
         loggedIn===false && (
@@ -37,7 +39,8 @@ function App() {
        <Route path='/logout' component={LogOutBtn} />
        </>
      )}
-    {/* <Route path='/postQues' component={PostQues} /> */}
+     
+
       </Switch>
     </BrowserRouter>
 );
